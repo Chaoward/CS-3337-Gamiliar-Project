@@ -1,9 +1,10 @@
 const Discord = require("discord.js");
 const fs = require("fs");
+const { token } = require("./decrypt");
 
 const CMD_FILE_PATH = "./cmds/";
-const DEV_GUILD_ID = "326923077625839626";
-const BOT_ID = "";
+const DEV_GUILD_ID = require("./config.json").dev_server_id;
+const BOT_ID = require("./config.json").bot_id;
 const client = new Discord.Client({
     intents: [
         Discord.IntentsBitField.Flags.Guilds,
@@ -50,7 +51,7 @@ async function loadCommands() {
         console.log("Registering Commands to the Server");
 
         //register
-        const rest = new REST({version: "10"}).setToken( String(fs.readFileSync("./token.txt")) );
+        const rest = new REST({version: "10"}).setToken( token() );
         if ( argv[2] == "1" ) {         //Global
             await rest.put(
                 Routes.applicationCommands(BOT_ID),     
@@ -103,4 +104,4 @@ client.on("ready", () => {
 
 
 loadCommands();
-client.login( String(fs.readFileSync("./token.txt")) );
+client.login( token() );
