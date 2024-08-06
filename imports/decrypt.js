@@ -1,9 +1,6 @@
-const { readFileSync } = require("fs");
-const TOKEN_PATH = "./token.txt";
-
 module.exports = {
     token: function() {
-        let raw = String(readFileSync(TOKEN_PATH)).split(",");
+        let raw = require("../config.json").discord_token.split(',');
         let token = "";
 
         for (const charNum of raw) {

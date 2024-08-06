@@ -1,33 +1,31 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 
-//USE THIS AS A TEMPLATE
+
+
+//TEST COMMAND  --- WILL BE REMOVED WHEN DEPLOYED
 module.exports = {
     //NOTE: any changes in 'data' must be registered again. View main.js/loadCommands() for detail
     data: new SlashCommandBuilder()
         .setName("test")
-        .setDescription("testing other function")
-        .addStringOption(option => 
-            option
-                .setName("extra")
-                .setDescription("extra")
-        ),
-        
-    //main function of the command
-    async execute(interact) {
-        //reading the args of a command
-        const arg = interact.options.getString("extra");
-        if ( (arg == null ? "" : arg.toLowerCase()) === "there") {
-            interact.reply({
-                embeds: [{
-                    color: 0xFFD700,
-                    image: {
-                        url: "https://c.tenor.com/smu7cmwm4rYAAAAC/general-kenobi-kenobi.gif"
-                    }
-                }]
-            });
-            return;
-        }
+        .setDescription("testing other function"),
 
-        await interact.reply("Hello, I'm Mr. Bot. This is my code. I eat the bug.");
+    async execute(interact) {
+        interact.reply({
+            content: "Ping",
+            components: [
+                new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setCustomId(this.data.name + "_btn")
+                            .setLabel("Click!")
+                            .setStyle(ButtonStyle.Primary)
+                    )
+            ]
+        });
+    },
+
+    async button(interact) {
+        if (interact.customId == this.data.name + "_btn")
+            interact.reply("Pong!");
     }
 };
